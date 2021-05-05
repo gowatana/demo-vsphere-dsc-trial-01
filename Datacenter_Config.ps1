@@ -17,7 +17,7 @@ $script:configurationData = @{
 
 Configuration Datacenter_Config {
     Import-DscResource -ModuleName 'VMware.vSphereDSC'
-
+    
     $ESXiUser = "root"
     $ESXiPassword = "VMware1!"
     $ESXiPassword = $ESXiPassword | ConvertTo-SecureString -AsPlainText -Force
@@ -114,6 +114,5 @@ Configuration Datacenter_Config {
                 DependsOn = "[VMHostVss]$vSSResourceName"
             }
         }
-
     }
 }
