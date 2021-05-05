@@ -2,12 +2,15 @@ $script:configurationData = @{
     AllNodes = @(
         @{
             NodeName = '192.168.10.163'
+            HostName = 'lab-esxi-163'
         },
         @{
             NodeName = '192.168.10.164'
+            HostName = 'lab-esxi-164'
         },
         @{
             NodeName = '192.168.10.165'
+            HostName = 'lab-esxi-165'
         }
     )
 }
@@ -50,6 +53,16 @@ Configuration Datacenter_Config {
                 Port = 443
                 Force = $true
                 DependsOn = '[Cluster]MyCluster'
+            }
+
+            $VMHostDNSResourceName = "VMHostDNS_" + $VMHost["NodeName"]
+            VMHostDnsSettings $VMHostDNSResourceName {
+                Name = $VMHost["NodeName"]
+                HostName = $VMHost["HostName"]
+                DomainName = "go-lab.jp"
+                Dhcp = $false
+                Address = @("192.168.1.101", "192.168.1.102")
+                SearchDomain = @("go-lab.jp")
             }
 
             $VMHostNtpResourceName = "VMHostNtp_" + $VMHost["NodeName"]
@@ -101,6 +114,6 @@ Configuration Datacenter_Config {
                 DependsOn = "[VMHostVss]$vSSResourceName"
             }
         }
-        
+
     }
 }
