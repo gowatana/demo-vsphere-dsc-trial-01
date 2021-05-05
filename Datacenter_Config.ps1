@@ -17,7 +17,7 @@ $script:configurationData = @{
 
 Configuration Datacenter_Config {
     Import-DscResource -ModuleName 'VMware.vSphereDSC'
-    
+
     $ESXiUser = "root"
     $ESXiPassword = "VMware1!"
     $ESXiPassword = $ESXiPassword | ConvertTo-SecureString -AsPlainText -Force
@@ -112,6 +112,17 @@ Configuration Datacenter_Config {
                 Ensure = 'Present'
                 VLanId = 10
                 DependsOn = "[VMHostVss]$vSSResourceName"
+            }
+
+            $NFSResourceName = "NFS_" + $VMHost["NodeName"]
+            NfsDatastore $NFSResourceName {
+                VMHostName = $VMHost["NodeName"]
+                Name = 'Datastore-NFS-169'
+                NfsHost = '192.168.10.169'
+                Path = '/nfs'
+                FileSystemVersion = '3'
+                AuthenticationMethod = 'AUTH_SYS'
+                Ensure = 'Present'
             }
         }
     }
