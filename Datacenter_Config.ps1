@@ -48,11 +48,11 @@ Configuration Datacenter_Config {
                 DatacenterName = 'lab-dc-61'
                 DatacenterLocation = ''
                 Location = 'dsc-cluster-61'
-                Ensure = 'Present'
                 VMHostCredential = $VMHostCredential
                 Port = 443
                 Force = $true
                 DependsOn = '[Cluster]MyCluster'
+                Ensure = 'Present'
             }
 
             $VMHostDNSResourceName = "VMHostDNS_" + $VMHost["NodeName"]
@@ -65,8 +65,8 @@ Configuration Datacenter_Config {
                 SearchDomain = @("go-lab.jp")
             }
 
-            $VMHostNtpResourceName = "VMHostNtp_" + $VMHost["NodeName"]
-            VMHostNtpSettings $VMHostNtpResourceName {
+            $VMHostNTPResourceName = "VMHostNTP_" + $VMHost["NodeName"]
+            VMHostNtpSettings $VMHostNTPResourceName {
                 Name = $VMHost["NodeName"]
                 NtpServer = @("192.168.1.101", "192.168.1.102")
                 NtpServicePolicy = "automatic"
@@ -75,25 +75,24 @@ Configuration Datacenter_Config {
             $vSSResourceName = "vSS_" + $VMHost["NodeName"]
             VMHostVss $vSSResourceName {
                 Name = $VMHost["NodeName"]
-                Ensure = 'Present'
                 VssName = 'vSwitch1'
                 Mtu = 1500
                 DependsOn = "[vCenterVMHost]$VMHostResourceName"
+                Ensure = 'Present'
             }
 
             $vSSBridgeResourceName = "vSSBridge_" + $VMHost["NodeName"]
             VMHostVssBridge $vSSBridgeResourceName {
                 Name = $VMHost["NodeName"]
                 VssName = 'vSwitch1'
-                Ensure = 'Present'
                 NicDevice = @('vmnic2','vmnic3')
                 DependsOn = "[VMHostVss]$vSSResourceName"
+                Ensure = 'Present'
             }
 
             $vSSTeamResourceName = "vSSTeam_" + $VMHost["NodeName"]
             VMHostVssTeaming $vSSTeamResourceName {
                 Name = $VMHost["NodeName"]
-                Ensure = 'Present'
                 VssName = 'vSwitch1'
                 CheckBeacon = $false
                 ActiveNic = @('vmnic2')
@@ -102,16 +101,17 @@ Configuration Datacenter_Config {
                 Policy = 'Failover_Explicit'
                 RollingOrder = $false
                 DependsOn = "[VMHostVss]$vSSResourceName"
+                Ensure = 'Present'
             }
 
-            $vSSPGResourceName = "vSSPGs_" + $VMHost["NodeName"]
+            $vSSPGResourceName = "vSSPG_" + $VMHost["NodeName"]
             VMHostVssPortGroup $vSSPGResourceName {
                 VMHostName = $VMHost["NodeName"]
                 Name = 'PG-VLAN-0010-vSwitch1'
                 VssName = 'vSwitch1'
-                Ensure = 'Present'
                 VLanId = 10
                 DependsOn = "[VMHostVss]$vSSResourceName"
+                Ensure = 'Present'
             }
 
             $NFSResourceName = "NFS_" + $VMHost["NodeName"]
