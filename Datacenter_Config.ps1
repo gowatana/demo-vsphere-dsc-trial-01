@@ -124,6 +124,12 @@ Configuration Datacenter_Config {
                 AuthenticationMethod = 'AUTH_SYS'
                 Ensure = 'Present'
             }
+
+            $VMHostConfigResourceName = "NVMHostConfig_" + $VMHost["NodeName"]
+            VMHostConfiguration $VMHostConfigResourceName {
+                Name = $VMHost["NodeName"]
+                State = 'Connected'
+            }
         }
     }
 }
