@@ -52,6 +52,13 @@ Configuration Datacenter_Config {
                 DependsOn = '[Cluster]MyCluster'
             }
 
+            $VMHostNtpResourceName = "VMHostNtp_" + $VMHost["NodeName"]
+            VMHostNtpSettings $VMHostNtpResourceName {
+                Name = $VMHost["NodeName"]
+                NtpServer = @("192.168.1.101", "192.168.1.102")
+                NtpServicePolicy = "automatic"
+            }
+
             $vSSResourceName = "vSS_" + $VMHost["NodeName"]
             VMHostVss $vSSResourceName {
                 Name = $VMHost["NodeName"]
