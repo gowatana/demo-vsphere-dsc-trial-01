@@ -15,6 +15,11 @@ $script:configurationData = @{
 Configuration Datacenter_Config {
     Import-DscResource -ModuleName 'VMware.vSphereDSC'
 
+    $ESXiUser = "root"
+    $ESXiPassword = "VMware1!"
+    $ESXiPassword = $ESXiPassword | ConvertTo-SecureString -AsPlainText -Force
+    $VMHostCredential = New-Object System.Management.Automation.PSCredential($ESXiUser, $ESXiPassword)
+
     vSphereNode 'lab-vc-06.go-lab.jp' {
         Datacenter 'MyDatacenter' {
             Name = 'lab-dc-61'
